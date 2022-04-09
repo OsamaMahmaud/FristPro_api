@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\AddEmployee;
 use App\Models\Car;
+use App\Models\Department;
 use App\Traits\GeneralTrait;
+use Department;
 use Illuminate\Http\Request;
 use JWTFactory;
 use JWTAuth;
@@ -26,7 +28,8 @@ class CarController extends Controller
 
         $car = Car::first();
         $car =Car::with('employee')->get();
-        $emp=AddEmployee::select('name')->get();
+        $emp=AddEmployee::select('dept_id')->get();
+        $dep=Department:get();
         // $emp = $admin->employee;
         return $this->sendResponse($emp->toArray(), 'All Employees');
     }
