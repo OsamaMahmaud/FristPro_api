@@ -19,6 +19,7 @@ class EmployeeController extends Controller
     /* Start get List Of department */
     public function getdepartment()
     {
+
         $dept=Department::get();
         return $this->sendResponse($dept->toArray(), '  get all department succesfully');
     }
@@ -49,13 +50,8 @@ class EmployeeController extends Controller
             return $this->returnValidationError($code, $validator);
         }
         $emp = AddEmployee::create($input);
-
-
         return $this->sendResponse($emp->toArray(), 'Employee created succesfully');
-
     }
-
-
 
 // update employee
     public function update(Request $request , $id)
@@ -68,9 +64,7 @@ class EmployeeController extends Controller
             'email'=>'required',
             'password'=>'required',
             'dept_id'=>'required'
-
         ]);
-
         if ($validator -> fails()) {
             # code...
             return $this->sendError('error validation', $validator->errors());
@@ -81,24 +75,13 @@ class EmployeeController extends Controller
         $emp->password =  $input['password'];
         $emp->save();
         return $this->sendResponse($emp->toArray(), 'employee  updated succesfully');
-
     }
-
-
-
 
     public function destroy(Request $request, $id)
     {
-
-
         $emp=AddEmployee::find($id);
         $emp->delete();
-
-
         return $this->sendResponse($emp->toArray(), 'employee  deleted succesfully');
-
     }
-
-
-
+    
 }

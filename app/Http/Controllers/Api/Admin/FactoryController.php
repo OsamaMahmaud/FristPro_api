@@ -28,6 +28,13 @@ class FactoryController extends Controller
 
     }
 
+    public function getdepartment()
+    {
+
+        $dept=Department::get();
+        return $this->sendResponse($dept->toArray(), '  get all department succesfully');
+    }
+
 
     public function store(Request $request)
     {
@@ -50,8 +57,6 @@ class FactoryController extends Controller
 
         $factor = Factory::create($input);
 
-
-
         return $this->sendResponse($factor->toArray(), 'Factory  created succesfully');
 
     }
@@ -66,7 +71,6 @@ class FactoryController extends Controller
             return $this->sendError(  '$factor not found ! ');
         }
         return $this->sendResponse($factor->toArray(), 'show Factory succesfully');
-
     }
 
 // update category

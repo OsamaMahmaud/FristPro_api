@@ -38,6 +38,11 @@ class Car extends Model
         return $this -> hasMany('App\Models\AddEmployee','car_id');
     }
 
+    //    //has one through
+    //    public function department(){
+    //     return $this -> hasOneThrough('App\Models\AddEmployee','App\Models\Department','car_id','emp_id','id','id');
+    // }
+
 
 
 }

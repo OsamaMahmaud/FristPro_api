@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\AddEmployee;
 use App\Models\Car;
 use App\Models\Department;
+use App\Models\Employee;
 use App\Traits\GeneralTrait;
-use Department;
 use Illuminate\Http\Request;
 use JWTFactory;
 use JWTAuth;
@@ -29,9 +29,9 @@ class CarController extends Controller
         $car = Car::first();
         $car =Car::with('employee')->get();
         $emp=AddEmployee::select('dept_id')->get();
-        $dep=Department:get();
+        // $dep=Department:get();
         // $emp = $admin->employee;
-        return $this->sendResponse($emp->toArray(), 'All Employees');
+        return $this->sendResponse($car->toArray(), 'All Employees');
     }
 
     public function store(Request $request)
@@ -46,16 +46,7 @@ class CarController extends Controller
             $code = $this->returnCodeAccordingToInput($validator);
             return $this->returnValidationError($code, $validator);
         }
-        $car = Car::create([
-            'drivers_name' => $request->drivers_name ,
-        ]);
-
-
-        // Offer::create([
-        //     'photo' => $file_name,
-        //     'name_ar' => $request->name_ar,
-
-        // ]);
+        $car = Car::create($input);
 
         return $this->sendResponse($car->toArray(), 'Car created succesfully');
 
@@ -72,8 +63,6 @@ class CarController extends Controller
 
     }
 
-
-
 // update category
     public function update(Request $request , Car $car)
     {
@@ -83,7 +72,7 @@ class CarController extends Controller
             'snn'=> 'required',
             'phone'=> 'required',
             'work_area'=> 'required',
-        ] );
+        ]);
 
         if ($validator -> fails()) {
             # code...
@@ -103,7 +92,16 @@ class CarController extends Controller
     {
         $car->delete();
         return $this->sendResponse($car->toArray(), 'Car  deleted succesfully');
-
     }
 
+    public function getDeptOfCar()
+    {
+        $emp=AddEmployee::whereHas('department', function ($q) {
+            $q->where('dept_name', 'deriver');
+        })->get('name');
+        return $this->sendResponse($emp->toArray(), ' get derivers succesfully');
+    }
 }
+
+
+

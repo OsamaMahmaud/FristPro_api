@@ -46,7 +46,7 @@ class DepartmentController extends Controller
     }
 
     //show category
-    public function show(  $id)
+    public function show( $id)
     {
         $profile = Department::find($id);
         if (   is_null($profile)   ) {

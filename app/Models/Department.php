@@ -12,7 +12,7 @@ class Department extends Authenticatable  implements JWTSubject
     protected $table = 'department';
 
     protected $fillable = [
-        'name'
+        'dept_name','emp_id'
     ];
 
     protected $hidden=['pivot'];

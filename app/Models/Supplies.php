@@ -3,17 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Profile extends Authenticatable  implements JWTSubject
+class Supplies extends Model
 {
-
-    protected $table = 'profile';
+    protected $table = 'supplies';
 
     protected $fillable = [
-        'name', 'email','password','photo'
+        'ssn', 'category','quantity','unit'
     ];
+
+    //protected $hidden =['created_at','updated_at','pivot'];
+
     public $timestamps = false;
 
     /**
@@ -36,4 +36,11 @@ class Profile extends Authenticatable  implements JWTSubject
         return [];
     }
 
+
+
+
 }
+
+
+
+

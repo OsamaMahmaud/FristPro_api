@@ -43,13 +43,14 @@ Route::group(['middleware'=>['api','change-language'],'namespace'=>'App\Http\Con
         Route::get('getalldepartment','EmployeeController@getAllDepartment');///get all employee
         Route::post('savedeptofemp','EmployeeController@saveDeptOfEmployee');///save dept of employee
         Route::get('getdepartment','EmployeeController@getdepartment');///save dept of employee
-
         Route::get('getemp-dept','EmployeeController@EmployeeWithDepartment');///get all employee with dept
         /////////////End Employee////////////////////////////////////////////////////////
 
 
         Route::resource('category', 'CategoriesController') ;//category
         Route::resource('car', 'CarController') ;//car
+        Route::get('getdeptofcar','CarController@getDeptOfCar');
+
 
         ////////////start create factory/////////////////////////////////////////////////////
         Route::resource('factory', 'FactoryController') ;//factory
@@ -62,11 +63,7 @@ Route::group(['middleware'=>['api','change-language'],'namespace'=>'App\Http\Con
 
         Route::resource('Store', 'TrashStoreController');//store
         Route::resource('area', 'AddareaController');//add area
-
         Route::resource('department', 'DepartmentController');//add department
-
-
-
         Route::post('logout','AuthController@logout') -> middleware(['auth.guard:admin-api']);
         //invalidate token security side
 
@@ -77,6 +74,16 @@ Route::group(['middleware'=>['api','change-language'],'namespace'=>'App\Http\Con
 
         Route::get('getHospitalDoctors','EmployeeController@getHospitalDoctors');
 
+        Route::resource('supplies', 'SuppliesController');
+
+    });
+
+    Route::group(['prefix' => 'accountant','namespace'=>'Admin'],function (){
+
+        Route::resource('supplies', 'SuppliesController');
+        Route::get('getuser', 'SuppliesController@getuser');
+        Route::get('getcategory', 'SuppliesController@getcategory');
+        Route::get('getquantity', 'SuppliesController@getquantity');
 
     });
 
@@ -85,7 +92,9 @@ Route::group(['middleware'=>['api','change-language'],'namespace'=>'App\Http\Con
         Route::post('register','RegisterController@register') ;
         Route::post('login','AuthController@Login') ;
         Route::resource('profile', 'ProfileController') ;
+        Route::post('uploadImage', 'ProfileController@uploadImage') ;
         Route::post('logout','AuthController@Logout')-> middleware(['auth.guard:user-api']);
+
     });
 
 });

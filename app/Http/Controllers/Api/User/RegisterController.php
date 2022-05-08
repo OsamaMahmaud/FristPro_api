@@ -11,11 +11,12 @@ use Response;
 
 class RegisterController extends Controller
 {
-    //
+
     public function register( Request $request){
         $validator = Validator::make($request -> all(),[
             'email' => 'required|string|email|max:255|unique:users',
             'name' => 'required',
+            'ssn' => 'required',
             'password'=> 'required'
         ]);
 
@@ -27,6 +28,7 @@ class RegisterController extends Controller
         User::create([
             'name' => $request->get('name'),
             'email' => $request->get('email'),
+            'ssn'=> $request->get('ssn'),
             'password'=> bcrypt($request->get('password')),
         ]);
         $user = User::first();

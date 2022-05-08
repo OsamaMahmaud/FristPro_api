@@ -24,11 +24,20 @@ class ProfileController extends Controller
     public function store(Request $request)
     {
         # code...
-        $input = $request->all();
+        $file_name = $this->saveImage($request->photo, 'images');
+        // $input = $request->all();
+
+        $input = Profile::create([
+            'photo' => $file_name,
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $request->password,
+        ]);
         $validator =    Validator::make($input, [
             'name'=> 'required',
             'email'=>'required',
-            'password'=> 'required'
+            'password'=> 'required',
+            'photo'=> 'required'
         ] );
 
         if ($validator->fails()) {
@@ -36,8 +45,6 @@ class ProfileController extends Controller
             return $this->returnValidationError($code, $validator);
         }
 
-        $profile = Profile::create($input);
-        return $this->sendResponse($profile->toArray(), 'Profile  created succesfully');
 
     }
 
@@ -61,7 +68,9 @@ class ProfileController extends Controller
         $validator =    Validator::make($input, [
             'name'=> 'required',
             'email'=> 'required',
-            'password'=> 'required'
+            'password'=> 'required',
+            'photo'=> 'required'
+
         ] );
 
         if ($validator -> fails()) {
@@ -71,6 +80,7 @@ class ProfileController extends Controller
         $profile->name =  $input['name'];
         $profile->email =  $input['email'];
         $profile->password =  $input['password'];
+        $profile->photo =  $input['photo'];
         $profile->save();
         return $this->sendResponse($profile->toArray(), 'profile  updated succesfully');
 
@@ -85,5 +95,11 @@ class ProfileController extends Controller
         return $this->sendResponse($profile->toArray(), 'profile  deleted succesfully');
 
     }
+
+
+
+
+
+
 
 }

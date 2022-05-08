@@ -50,6 +50,10 @@ class Category extends Model
     public function  factory(){
         return $this ->  hasOne('App\Models\Factory','category_id');
     }
+
+
+
+
 }
 
 
