@@ -12,12 +12,17 @@ class AddEmployee extends Authenticatable  implements JWTSubject
     protected $table = 'employee';
 
     protected $fillable = [
-        'name', 'address','email','password','admin_id','dept_id','car_id'
+        'name', 'address','email','password','dept_id','role_id'
     ];
 
-    protected $hidden = [
-        'admin_id'
-    ];
+    // protected $fillable = [
+    //     'name', 'address','email','password','admin_id','dept_id','car_id','role_id'
+    // ];
+
+
+    // protected $hidden = [
+    //     'admin_id'
+    // ];
     public $timestamps = false;
 
     /**
@@ -44,21 +49,41 @@ class AddEmployee extends Authenticatable  implements JWTSubject
         return $this -> belongsTo('App\Models\Admin','admin_id','id');
     }
 
-
-
     public function Car(){
         return $this -> belongsTo('App\Models\Car','car_id','id');
     }
-
 
     // public function department(){
     //     return $this -> belongsToMany('App\Models\Department','emp_dept','emp_id','dept_id','id','id');
     // }
 
 
-
     public function department(){
         return $this -> belongsTo('App\Models\Department','dept_id','id');
+    }
+
+
+    public function role()
+    {
+        return $this->belongsTo('App\Models\Role','role_id');
+    }
+
+    public function hasAbility($permissions)    //products  //mahoud -> admin can't see brands
+    {
+        $role = $this->role;
+
+        if (!$role) {
+            return false;
+        }
+
+        foreach ($role->permissions as $permission) {
+            if (is_array($permissions) && in_array($permission, $permissions)) {
+                return true;
+            } else if (is_string($permissions) && strcmp($permissions, $permission) == 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
 

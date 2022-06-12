@@ -26,78 +26,143 @@ Route::group(['middleware'=>['api','change-language'],'namespace'=>'App\Http\Con
 
     Route::group(['prefix' => 'admin','namespace'=>'Admin'],function (){
 
-        ///////////////Start register&login////////////////////////////////////////////////
+    Route::resource('get', 'RolesController');
+
+        ///////////////Start register&login///////////////////////////////////////
         Route::post('register','RegisterController@register') ;
         Route::post('login', 'AuthController@login');
+        Route::get('getAll', 'AuthController@getAll');
         Route::post('logout', 'AuthController@logout');
         Route::post('sendEmail', 'MailController@sendEmail');
         Route::post('sendPasswordResetLink', 'PasswordResetRequestController@sendEmail');
         Route::post('resetPassword', 'ChangePasswordController@passwordResetProcess');
-        ///////////////End register&login///////////////////////////////////////////////////
+        ///////////////End register&login//////////////////////////////////////////
 
+        ////////////start area/////////////////////////////////////////////////////
+        Route::group(['prefix' => 'area','middleware' => 'can:area'], function () {
+        Route::resource('/', 'AddareaController');//add area
+        });
+        ////////////End area///////////////////////////////////////////////////////
 
-        /////////////Srart Employee////////////////////////////////////////////////////////
-        Route::resource('employee', 'EmployeeController') ;//employee
+         /////////////Srart car////////////////////////////////////////////////////
+         Route::group(['prefix' => 'car','middleware' => 'can:car'], function () {
+         Route::resource('/', 'CarController') ;//car
+         Route::get('getdeptofcar','CarController@getDeptOfCar');
+        });
+         /////////////end car///////////////////////////////////////////////////////
+
+        /////////////Srart categores////////////////////////////////////////////////
+        Route::group(['prefix' => 'category','middleware' => 'can:category'], function () {
+          Route::resource('/', 'CategoriesController') ;//category
+        });
+        /////////////end categores//////////////////////////////////////////////////
+
+        ////////////End department//////////////////////////////////////////////////
+        Route::group(['prefix' => 'department','middleware' => 'can:department'], function () {
+          Route::resource('/', 'DepartmentController');//add department
+        });
+        ////////////End department//////////////////////////////////////////////////
+
+        /////////////Srart Employee/////////////////////////////////////////////////
+        Route::group(['prefix' => 'employee','middleware' => 'can:employee'], function () {
+        Route::resource('/', 'EmployeeController') ;//employee
         Route::get('getdepofemployee/{emp_id}','EmployeeController@getDepartmentOfEmp');///button عرض صفحه الاقسام
-        Route::get('getallemployee','EmployeeController@getAllEmployee');///get all employee
-        Route::get('getalldepartment','EmployeeController@getAllDepartment');///get all employee
-        Route::post('savedeptofemp','EmployeeController@saveDeptOfEmployee');///save dept of employee
-        Route::get('getdepartment','EmployeeController@getdepartment');///save dept of employee
-        Route::get('getemp-dept','EmployeeController@EmployeeWithDepartment');///get all employee with dept
-        /////////////End Employee////////////////////////////////////////////////////////
+        Route::get('getallemployee','EmployeeController@getAllEmployee');///get all employee no
+        Route::get('getalldepartment','EmployeeController@getAllDepartment');///get all employee  no
+        Route::post('savedeptofemp','EmployeeController@saveDeptOfEmployee');///save dept of employee  no
+        Route::get('getdepartment','EmployeeController@getdepartment');///save dept of employee yes
+        Route::get('getemp-dept','EmployeeController@EmployeeWithDepartment');///get all employee with dept no
+        });
+        /////////////End Employee////////////////////////////////////////////////////
 
-
-        Route::resource('category', 'CategoriesController') ;//category
-        Route::resource('car', 'CarController') ;//car
-        Route::get('getdeptofcar','CarController@getDeptOfCar');
-
-
-        ////////////start create factory/////////////////////////////////////////////////////
-        Route::resource('factory', 'FactoryController') ;//factory
-        Route::get('getcategory', 'FactoryController@getCategory') ;//many to many//get all category
-        Route::get('getfactory', 'FactoryController@getFactory') ;//many to many//get all factory
-        Route::get('getCategoresOfFactory/{fact_id}', 'FactoryController@getCategoresOfFactory') ;//many to many//get all factory
-        Route::post('saveServicesToDoctors', 'FactoryController@saveServicesToDoctors') ;//many to many//save categores to factory
+        ////////////start create factory/////////////////////////////////////////////
+        Route::group(['prefix' => 'factory', 'middleware' => 'can:factory'], function () {
+        Route::resource('/', 'FactoryController') ;//factory
+        Route::get('getcategory', 'FactoryController@getCategory') ;//many to many//get all category  no
+        Route::get('getfactory', 'FactoryController@getFactory') ;//many to many//get all factory     no
+        Route::get('getCategoresOfFactory/{fact_id}', 'FactoryController@getCategoresOfFactory') ;//many to many//get all factory  no
+        Route::post('saveServicesToDoctors', 'FactoryController@saveServicesToDoctors') ;//many to many//save categores to factory  no
         Route::get('getallcategory', 'FactoryController@getAllCategory') ;//get all category new
-        ////////////End Factory///////////////////////////////////////////////////////////////
+        });
+        ////////////End Factory///////////////////////////////////////////////////////
 
+         ////////////start feedback///////////////////////////////////////////////////
+         Route::group(['prefix' => 'feedback'], function () {
+         Route::resource('/', 'FeedbackController');//add feedback
+         });
+         ////////////End feedback/////////////////////////////////////////////////////
+
+        ////////////start get_quentitiy/////////////////////////////////////////////// new
+        Route::group(['prefix' => 'get_quentitiy'], function () {
+         Route::get('/{ssn}', 'GetquantityController@get_quentitiy') ;//get quentitiy of metal,palistic,pepar
+        });
+        ////////////End get_quentitiy/////////////////////////////////////////////////
+
+        ////////////start store//////////////////////////////////////////////////////new
         Route::resource('Store', 'TrashStoreController');//store
-        Route::resource('area', 'AddareaController');//add area
-        Route::resource('department', 'DepartmentController');//add department
-        Route::post('logout','AuthController@logout') -> middleware(['auth.guard:admin-api']);
-        //invalidate token security side
-
-        //broken access controller user enumeration
+        Route::get('getallquantity', 'StoreController@metal') ;//get all metal for store
+        ////////////End store////////////////////////////////////////////////////////
+        Route::post('logout','AuthController@logout') -> middleware(['auth.guard:admin-api']);  //invalidate token security side
 
 
-        ################## Begin one To many Relationship #####################
 
-        Route::get('getHospitalDoctors','EmployeeController@getHospitalDoctors');
+        ////////////Start accountant////////////////////////////////////////////////////////
+        Route::group(['prefix' => 'accountant','namespace'=>'Admin'],function (){
+            Route::resource('/', 'SuppliesController');
+            Route::get('getuser', 'SuppliesController@getuser');
+            Route::get('getcategory', 'SuppliesController@getcategory');
+            Route::get('getquantity', 'SuppliesController@getquantity');
+        });
+        ////////////end accountant////////////////////////////////////////////////////////
 
-        Route::resource('supplies', 'SuppliesController');
+         ////////////start roles////////////////////////////////////////////////////////
+         Route::group(['prefix' => 'roles'], function () {
+            Route::get('/', 'RolesController@index');
+            Route::get('create', 'RolesController@create');
+            Route::post('store', 'RolesController@saveRole');
+            Route::get('/edit/{id}', 'RolesController@edit');
+            Route::post('update/{id}', 'RolesController@update');
+         });
+        ////////////End roles////////////////////////////////////////////////////////
 
     });
 
-    Route::group(['prefix' => 'accountant','namespace'=>'Admin'],function (){
+    // Route::group(['prefix' => 'addAdmin' ], function () {
+    //     Route::get('/', 'AddadminController@index');
+    //     Route::get('/create', 'AddadminController@create');
+    //     Route::post('/store', 'AddadminController@store');
+    // });
 
-        Route::resource('supplies', 'SuppliesController');
-        Route::get('getuser', 'SuppliesController@getuser');
-        Route::get('getcategory', 'SuppliesController@getcategory');
-        Route::get('getquantity', 'SuppliesController@getquantity');
-
-    });
-
-//user register&login&logout
+    //user register&login&logout
     Route::group(['prefix' => 'user','namespace'=>'User'],function (){
         Route::post('register','RegisterController@register') ;
         Route::post('login','AuthController@Login') ;
-        Route::resource('profile', 'ProfileController') ;
-        Route::post('uploadImage', 'ProfileController@uploadImage') ;
+        Route::resource('profile', 'ProfileController') ;//////////////
+        // Route::get('getquantity/{user_id}', 'ProfileController@getquantity') ;//////////////
+        Route::get('photo/{ssn}','ProfileController@getPhoto');
+        Route::get('points/{ssn}','ProfileController@points');
+        Route::get('getkillos/{ssn}','ProfileController@getKillos');
+        Route::get('gettotal/{ssn}','ProfileController@getTotal');
+        Route::get('getLastMonthRecords/{ssn}','ProfileController@getLastMonthRecords');
+        Route::post('uploadImage', 'ProfileController@uploadImage') ;/////////
+        Route::get('getalluser', 'AuthController@get_All_User') ;
         Route::post('logout','AuthController@Logout')-> middleware(['auth.guard:user-api']);
-
     });
 
+
+
 });
+
+
+
+
+
+
+
+
+
+
+
 
 Route::group(['middleware'=>['api','change-language','CheckAdminToken:admin-api'],'namespace'=>'App\Http\Controllers\Api'],function (){
 
@@ -108,9 +173,18 @@ Route::group(['middleware'=>['api','change-language','CheckAdminToken:admin-api'
 
 Route::post('sendEmail', 'App\Http\Controllers\MailController@sendEmail');
 
-
-
-
 Route::middleware('jwt.auth')->group( function(){
 
 } );
+
+
+
+
+
+
+
+
+
+################## Begin one To many Relationship #####################
+
+        // Route::get('getHospitalDoctors','EmployeeController@getHospitalDoctors');

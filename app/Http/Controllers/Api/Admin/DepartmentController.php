@@ -15,7 +15,7 @@ use Response;
 
 class DepartmentController extends Controller
 {
-   //All category
+   //All Department
     use GeneralTrait;
     public function index()
     {
@@ -25,7 +25,7 @@ class DepartmentController extends Controller
 
     }
 
-    //post category
+    //post Department
     public function store(Request $request)
     {
         # code...
@@ -45,7 +45,7 @@ class DepartmentController extends Controller
 
     }
 
-    //show category
+    //show Department
     public function show( $id)
     {
         $profile = Department::find($id);
@@ -59,7 +59,7 @@ class DepartmentController extends Controller
 
 
 
-// update category
+// update Department
     public function update(Request $request , Department $profile)
     {
         $input = $request->all();
@@ -77,7 +77,7 @@ class DepartmentController extends Controller
 
     }
 
-// delete category
+// delete Department
     public function destroy(Department $profile)
     {
         $profile->delete();

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AddEmployee;
+use App\Models\Admin;
 use App\Models\Car;
 use App\Models\Department;
 use App\Models\Employee;
@@ -27,7 +28,8 @@ class CarController extends Controller
         // return $this->sendResponse($car->toArray(), 'All Cars');
 
         $car = Car::first();
-        $car =Car::with('employee')->get();
+        $car = Car::get();
+        // $car =Car::with('employee')->get();
         $emp=AddEmployee::select('dept_id')->get();
         // $dep=Department:get();
         // $emp = $admin->employee;
@@ -69,9 +71,7 @@ class CarController extends Controller
         $input = $request->all();
         $validator = Validator::make($input, [
             'drivers_name'=> 'required',
-            'snn'=> 'required',
-            'phone'=> 'required',
-            'work_area'=> 'required',
+
         ]);
 
         if ($validator -> fails()) {
@@ -79,9 +79,7 @@ class CarController extends Controller
             return $this->sendError('error validation', $validator->errors());
         }
         $car->drivers_name =  $input['drivers_name'];
-        $car->snn =  $input['snn'];
-        $car->phone =  $input['phone'];
-        $car->work_area =  $input['work_area'];
+
         $car->save();
         return $this->sendResponse($car->toArray(), 'car  updated succesfully');
 
@@ -96,7 +94,7 @@ class CarController extends Controller
 
     public function getDeptOfCar()
     {
-        $emp=AddEmployee::whereHas('department', function ($q) {
+        $emp=Admin::whereHas('department', function ($q) {
             $q->where('dept_name', 'deriver');
         })->get('name');
         return $this->sendResponse($emp->toArray(), ' get derivers succesfully');

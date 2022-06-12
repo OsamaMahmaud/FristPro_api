@@ -41,12 +41,12 @@ class Department extends Authenticatable  implements JWTSubject
     }
 
     public function employees(){
-        return $this -> belongsToMany('App\Models\AddEmployee','emp_dept','emp_id','dept_id','id','id');
+        return $this -> belongsToMany('App\Models\Admin','emp_dept','emp_id','dept_id','id','id');
     }
 
 
     public function employee(){
-        return $this -> hasMany('App\Models\AddEmployee','dept_id','id');
+        return $this -> hasMany('App\Models\Admin','dept_id','id');
     }
 
 }

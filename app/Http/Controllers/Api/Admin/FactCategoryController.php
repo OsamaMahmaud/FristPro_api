@@ -21,21 +21,6 @@ class FactCategoryController extends Controller
     use GeneralTrait;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public function index()
     {
         # code...

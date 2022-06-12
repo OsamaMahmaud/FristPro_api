@@ -2,18 +2,18 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable  implements JWTSubject
+class Feedback extends Model
 {
 
-    protected $table = 'users';
+    protected $table = 'feedback';
 
     protected $fillable = [
-        'name', 'email','password','ssn','photo'
+         'name','ssn','feedback'
     ];
+
     public $timestamps = false;
 
     /**
@@ -36,9 +36,12 @@ class User extends Authenticatable  implements JWTSubject
         return [];
     }
 
-    public function  role()
-    {
-        return $this->belongsTo('App\Models\Role');
-    }
+
+
+
 
 }
+
+
+
+

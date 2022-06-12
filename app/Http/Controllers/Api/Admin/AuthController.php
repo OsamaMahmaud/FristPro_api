@@ -22,16 +22,20 @@ class AuthController extends Controller
 
     public function index()
     {
-
-        $categories = Admin:: get()->all();
+        $admin = Admin:: get();
         // return response() ->json($categories);
-        return $this->returnData('categories', $categories);
-
+        return $this->sendResponse($admin->toArray(), ' get all admins succesfully');
+        // return $this->returnData('categories', $categories);
     }
 
 
-
-
+    public function getAll()
+    {
+        $admin = Admin::get();
+        // return response() ->json($categories);
+        return $this->sendResponse($admin->toArray(), ' get all admins succesfully');
+        // return $this->returnData('categories', $categories);
+    }
 
     public function login(Request $request)
     {

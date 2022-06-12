@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AddEmployee;
+use App\Models\Role;
 use App\Models\Department;
 use App\Models\Admin;
 use App\Traits\GeneralTrait;
@@ -16,21 +17,29 @@ use Response;
 class EmployeeController extends Controller
 {
     use GeneralTrait;
-    /* Start get List Of department */
+
     public function getdepartment()
     {
 
         $dept=Department::get();
         return $this->sendResponse($dept->toArray(), '  get all department succesfully');
     }
-    /* End get List Of department */
+
 
     public function index()
     {
         $admin = Admin::first();
-        $admin = Admin::with('employee')->find(6);
-        $emp = $admin->employee;
-        return $this->sendResponse($emp->toArray(), 'All Employees');
+        // $admin = Admin::with('employee')->find(6);
+        $admin = Admin::get();
+        // $emp = $admin->employee;
+        return $this->sendResponse($admin->toArray(), 'All Employees');
+    }
+
+    public function create(){
+        $roles = Role::get();
+        return $this->sendResponse($roles->toArray(), ' all admins  succesfully');
+
+     //    return view('dashboard.users.create',compact('roles'));
     }
 
     public function store(Request $request)
@@ -42,28 +51,30 @@ class EmployeeController extends Controller
             'address'=> 'required',
             'email'=>'required',
             'password'=>'required',
-            'dept_id'=>'required'
+            'dept_id'=>'required',
+            'role_id'=>'required'
         ] );
 
         if ($validator->fails()) {
             $code = $this->returnCodeAccordingToInput($validator);
             return $this->returnValidationError($code, $validator);
         }
-        $emp = AddEmployee::create($input);
+        $emp = Admin::create($input);
         return $this->sendResponse($emp->toArray(), 'Employee created succesfully');
     }
 
-// update employee
+// update emp
     public function update(Request $request , $id)
     {
-        $emp=AddEmployee::find($id);
+        $emp=Admin::find($id);
         $input = $request->all();
         $validator = Validator::make($input, [
             'name'=> 'required',
             'address'=> 'required',
             'email'=>'required',
             'password'=>'required',
-            'dept_id'=>'required'
+            'dept_id'=>'required',
+            'role_id'=>'required'
         ]);
         if ($validator -> fails()) {
             # code...
@@ -73,15 +84,17 @@ class EmployeeController extends Controller
         $emp->address =  $input['address'];
         $emp->email =  $input['email'];
         $emp->password =  $input['password'];
+        $emp->role_id =  $input['role_id'];
         $emp->save();
         return $this->sendResponse($emp->toArray(), 'employee  updated succesfully');
     }
 
+    ////delet emp
     public function destroy(Request $request, $id)
     {
-        $emp=AddEmployee::find($id);
+        $emp=Admin::find($id);
         $emp->delete();
         return $this->sendResponse($emp->toArray(), 'employee  deleted succesfully');
     }
-    
+
 }

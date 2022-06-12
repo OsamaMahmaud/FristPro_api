@@ -3,16 +3,16 @@
 namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin;
+use App\Models\User;
 use App\Traits\GeneralTrait;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Validator;
 use Auth;
 
+
 class AuthController extends Controller
 {
-
     use GeneralTrait;
 
     public function login(Request $request)
@@ -22,7 +22,6 @@ class AuthController extends Controller
             $rules = [
                 "email" => "required",
                 "password" => "required"
-
             ];
 
             $validator = Validator::make($request->all(), $rules);
@@ -67,4 +66,11 @@ class AuthController extends Controller
         }
 
     }
+
+
+    public function get_All_User(){
+        $user=User::get();
+        return $this->sendResponse($user->toArray(), '  get all user succesfully');
+    }
+
 }

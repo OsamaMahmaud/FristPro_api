@@ -45,10 +45,9 @@ class SuppliesController extends Controller
 
              $supplies = Supplies::create($input);
              return $this->sendResponse($supplies->toArray(), 'Supplies  created succesfully');
-
          }
 
-         //show category
+         //show supplies
          public function show( $id)
          {
              $supplies = Supplies::find($id);
@@ -57,12 +56,9 @@ class SuppliesController extends Controller
                  return $this->sendError(  'supplies not found ! ');
              }
              return $this->sendResponse($supplies->toArray(), 'show supplies succesfully');
-
          }
 
-
-
-     // update category
+     // update supplies
          public function update(Request $request , Supplies $supplies)
          {
              $input = $request->all();
@@ -86,7 +82,7 @@ class SuppliesController extends Controller
 
          }
 
-     // delete category
+     // delete supplies
          public function destroy(Supplies $supplies)
          {
              $supplies->delete();
@@ -97,14 +93,12 @@ class SuppliesController extends Controller
          public function getuser(){
              $user=User::get('ssn');
              return $this->sendResponse($user->toArray(), '  get all ssn succesfully');
-
          }
 
          ///////////get all category
          public function getcategory(){
             $categ=Category::get('name');
             return $this->sendResponse($categ->toArray(), '  get all category succesfully');
-
         }
 
         public function getquantity(){
@@ -113,14 +107,5 @@ class SuppliesController extends Controller
             // $Supp=Supplies::get('quantity');
             return $this->sendResponse($Supp->toArray(), '  get all quantity succesfully');
         }
-
-
-
-
-        ///sum quantity
-
-
-
-
 
      }

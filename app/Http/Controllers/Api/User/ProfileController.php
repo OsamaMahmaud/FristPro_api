@@ -4,12 +4,13 @@ namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Profile;
+use App\Models\Role;
+use App\Models\Supplies;
+use App\Models\User;
 use App\Traits\GeneralTrait;
 use Illuminate\Http\Request;
-use JWTFactory;
-use JWTAuth;
 use Validator;
-use Response;
+
 
 class ProfileController extends Controller
 {
@@ -98,8 +99,84 @@ class ProfileController extends Controller
 
 
 
+    public function getPhoto($ssn)
+    {
+        $photo=User::where('ssn',$ssn)->get('photo');
+
+        return $this->sendResponse($photo, 'get photo succesfully');
+
+    }
+
+    public function points($ssn)
+    {
+        $metal=0;
+        $plastic=0;
+        $paper=0;
+        $points=0;
+        // $category=Supplies::get('category');
+        $metal=Supplies::where('category','metal')->where('ssn',$ssn)->sum('quantity');
+        $paper=Supplies::where('category','pepar')->where('ssn',$ssn)->sum('quantity');
+        $plastic=Supplies::where('category','plastic')->where('ssn',$ssn)->sum('quantity');
+        // $quentity= Supplies::where('ssn',$ssn)->sum('quantity');
+        return $points =  ($metal*5) + ($paper*2) + ($plastic*3);
+        //return $total=(($metal*5)* $Supp) + (($paper*2)* $Supp ) + (($plastic*3)* $Supp);
+    }
+
+
+    public function getKillos($ssn)
+    {
+        $killos=Supplies::where('ssn',$ssn)->sum('quantity');
+
+        return $this->sendResponse($killos, 'get sum of killos succesfully');
+
+    }
+
+    public function getTotal($ssn)
+    {
+        $total=0;
+        $metal=Supplies::where('category','metal')->where('ssn',$ssn)->sum('quantity');
+        $paper=Supplies::where('category','pepar')->where('ssn',$ssn)->sum('quantity');
+        $plastic=Supplies::where('category','plastic')->where('ssn',$ssn)->sum('quantity');
+        $points =  ($metal*5) + ($paper*2) + ($plastic*3);
+        $killos=Supplies::where('ssn',$ssn)->sum('quantity');
+        $total=$points/$killos;
+        return $this->sendResponse($total, 'get total succesfully');
+
+    }
 
 
 
+    public function getLastMonthRecords($ssn){
+
+        $last_Day= Supplies::where('created_at','>=',\Carbon\Carbon::now()->subdays(1))->where('ssn',$ssn)->get();
+        $last_month= Supplies:: whereMonth('created_at', '=', \Carbon\Carbon::now()->subMonth()->month)->get();
+        // $last_month= Supplies::whereMonth('created_at', '=', \Carbon\Carbon::now()->subMonth()->month)->get();
+    //   return $this->sendResponse($last_month->toArray(), 'get data for last month succesfully');
+    return $last_Day;
+    }
+
+    public function quentitiy_metal($ssn){
+    $metal=Supplies::where('category','metal')->where('ssn',$ssn)->sum('quantity');
+    return $this->sendResponse($metal, 'get total succesfully');
+
+    }
+
+
+    public function get_quentitiy($ssn){
+        $paper=Supplies::where('category','pepar')->where('ssn',$ssn)->sum('quantity');
+        $plastic=Supplies::where('category','plastic')->where('ssn',$ssn)->sum('quantity');
+        $pepar=Supplies::where('category','pepar')->where('ssn',$ssn)->sum('quantity');
+        return $this->sendResponse(compact('metal','plastic','pepar'), 'get paper succesfully');
+
+        }
+
+        public function quentitiy_plastic($ssn){
+
+            $plastic=Supplies::where('category','plastic')->where('ssn',$ssn)->sum('quantity');
+            return $this->sendResponse($plastic, 'get paper succesfully');
+
+            }
 
 }
+
+
