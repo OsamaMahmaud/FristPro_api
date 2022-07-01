@@ -54,7 +54,7 @@ class CarController extends Controller
 
     }
 
-    public function show(  $id)
+    public function show($id)
     {
         $car = Car::find($id);
         if (   is_null($car)   ) {
@@ -62,7 +62,6 @@ class CarController extends Controller
             return $this->sendError(  '$Car not found ! ');
         }
         return $this->sendResponse($car->toArray(), 'show Car succesfully');
-
     }
 
 // update category
@@ -71,9 +70,8 @@ class CarController extends Controller
         $input = $request->all();
         $validator = Validator::make($input, [
             'drivers_name'=> 'required',
-
         ]);
-
+        
         if ($validator -> fails()) {
             # code...
             return $this->sendError('error validation', $validator->errors());

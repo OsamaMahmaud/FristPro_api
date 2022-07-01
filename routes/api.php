@@ -38,33 +38,33 @@ Route::group(['middleware'=>['api','change-language'],'namespace'=>'App\Http\Con
         Route::post('resetPassword', 'ChangePasswordController@passwordResetProcess');
         ///////////////End register&login//////////////////////////////////////////
 
-        ////////////start area/////////////////////////////////////////////////////
-        Route::group(['prefix' => 'area','middleware' => 'can:area'], function () {
+        ////////////start area/////////////////////////////////////////////////////,'middleware' => 'can:area'
+        Route::group(['prefix' => 'area'], function () {
         Route::resource('/', 'AddareaController');//add area
         });
         ////////////End area///////////////////////////////////////////////////////
 
-         /////////////Srart car////////////////////////////////////////////////////
-         Route::group(['prefix' => 'car','middleware' => 'can:car'], function () {
+         /////////////Srart car////////////////////////////////////////////////////,'middleware' => 'can:car'
+         Route::group(['prefix' => 'car'], function () {
          Route::resource('/', 'CarController') ;//car
          Route::get('getdeptofcar','CarController@getDeptOfCar');
         });
          /////////////end car///////////////////////////////////////////////////////
 
         /////////////Srart categores////////////////////////////////////////////////
-        Route::group(['prefix' => 'category','middleware' => 'can:category'], function () {
+        Route::group(['prefix' => 'category'], function () {
           Route::resource('/', 'CategoriesController') ;//category
         });
         /////////////end categores//////////////////////////////////////////////////
 
-        ////////////End department//////////////////////////////////////////////////
-        Route::group(['prefix' => 'department','middleware' => 'can:department'], function () {
+        ////////////End department//////////////////////////////////////////////////,'middleware' => 'can:department'
+        Route::group(['prefix' => 'department'], function () {
           Route::resource('/', 'DepartmentController');//add department
         });
         ////////////End department//////////////////////////////////////////////////
 
-        /////////////Srart Employee/////////////////////////////////////////////////
-        Route::group(['prefix' => 'employee','middleware' => 'can:employee'], function () {
+        /////////////Srart Employee/////////////////////////////////////////////////,'middleware' => 'can:employee'
+        Route::group(['prefix' => 'employee'], function () {
         Route::resource('/', 'EmployeeController') ;//employee
         Route::get('getdepofemployee/{emp_id}','EmployeeController@getDepartmentOfEmp');///button عرض صفحه الاقسام
         Route::get('getallemployee','EmployeeController@getAllEmployee');///get all employee no
@@ -75,8 +75,8 @@ Route::group(['middleware'=>['api','change-language'],'namespace'=>'App\Http\Con
         });
         /////////////End Employee////////////////////////////////////////////////////
 
-        ////////////start create factory/////////////////////////////////////////////
-        Route::group(['prefix' => 'factory', 'middleware' => 'can:factory'], function () {
+        ////////////start create factory///////////////////////////////////////////// , 'middleware' => 'can:factory'
+        Route::group(['prefix' => 'factory'], function () {
         Route::resource('/', 'FactoryController') ;//factory
         Route::get('getcategory', 'FactoryController@getCategory') ;//many to many//get all category  no
         Route::get('getfactory', 'FactoryController@getFactory') ;//many to many//get all factory     no
@@ -107,13 +107,26 @@ Route::group(['middleware'=>['api','change-language'],'namespace'=>'App\Http\Con
 
 
         ////////////Start accountant////////////////////////////////////////////////////////
-        Route::group(['prefix' => 'accountant','namespace'=>'Admin'],function (){
+        Route::group(['prefix' => 'accountant'],function (){
             Route::resource('/', 'SuppliesController');
             Route::get('getuser', 'SuppliesController@getuser');
             Route::get('getcategory', 'SuppliesController@getcategory');
             Route::get('getquantity', 'SuppliesController@getquantity');
         });
         ////////////end accountant////////////////////////////////////////////////////////
+
+
+        ////////////Start Bill////////////////////////////////////////////////////////
+        Route::group(['prefix' => 'bill'],function (){
+            Route::resource('/', 'BillController');
+            Route::get('getderivers', 'BillController@getderivers');
+            Route::get('get_acco_name', 'BillController@getAccoName');
+            Route::get('getcarid', 'BillController@getCarId');
+            Route::get('getallquantity', 'BillController@getallquantity');
+            Route::get('getquantityofbill/{ssn}', 'BillController@getquantityofbill');
+
+        });
+        ////////////end Bill////////////////////////////////////////////////////////
 
          ////////////start roles////////////////////////////////////////////////////////
          Route::group(['prefix' => 'roles'], function () {

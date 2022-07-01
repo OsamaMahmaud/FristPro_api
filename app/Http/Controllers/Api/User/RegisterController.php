@@ -29,7 +29,7 @@ class RegisterController extends Controller
             return response()->json($validator->errors());
         }
 
-        $file_name = $this->saveImage($request->photo, 'images');
+        $file_name = $this->saveImage($request->photo, 'public/images');
 
         User::create([
             'name' => $request->get('name'),

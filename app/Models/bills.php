@@ -2,17 +2,16 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Supplies extends Model
+class bills extends Model
 {
-    protected $table = 'supplies';
+    protected $table = 'bills';
 
     protected $fillable = [
-        'ssn', 'category','quantity','unit','bill_id'
+         'acco_name','car_num','area','created_at'
     ];
-
-    //protected $hidden =['created_at','updated_at','pivot'];
 
     public $timestamps = false;
 
@@ -36,13 +35,10 @@ class Supplies extends Model
         return [];
     }
 
-
-    public function bills()
+    public function supplies()
     {
-    	return $this->hasMany('App\Models\bills');
+    	return $this->belongsTo('App\Models\Supplies');
     }
-
-
 
 }
 

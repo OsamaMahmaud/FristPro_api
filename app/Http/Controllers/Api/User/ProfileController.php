@@ -62,11 +62,11 @@ class ProfileController extends Controller
 
 
 
-// update book
+// update
     public function update(Request $request , Profile $profile)
     {
         $input = $request->all();
-        $validator =    Validator::make($input, [
+        $validator = Validator::make($input, [
             'name'=> 'required',
             'email'=> 'required',
             'password'=> 'required',
@@ -84,10 +84,9 @@ class ProfileController extends Controller
         $profile->photo =  $input['photo'];
         $profile->save();
         return $this->sendResponse($profile->toArray(), 'profile  updated succesfully');
-
     }
 
-// delete book
+
     public function destroy(Profile $profile)
     {
 
@@ -104,7 +103,6 @@ class ProfileController extends Controller
         $photo=User::where('ssn',$ssn)->get('photo');
 
         return $this->sendResponse($photo, 'get photo succesfully');
-
     }
 
     public function points($ssn)
